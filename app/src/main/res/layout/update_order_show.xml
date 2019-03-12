@@ -11,6 +11,12 @@
         android:id="@+id/statusSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
     </com.jaredrummler.materialspinner.MaterialSpinner>
+    <EditText
+        android:id="@+id/id_order_for_shipper"
+        android:layout_marginTop="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter id of order for Accepted"/>
+
 </android.support.v7.widget.CardView>

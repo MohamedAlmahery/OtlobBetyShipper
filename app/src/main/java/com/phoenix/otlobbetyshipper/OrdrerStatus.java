@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,17 +53,15 @@ public class OrdrerStatus extends AppCompatActivity {
     FirebaseRecyclerAdapter<Request, OrderViewHolder> adapter;
 
     Button bntedit;
+    TextView ordernum;
 
-    OrderViewHolder orderViewHolderr;
-    Request request;
-    int position;
 
     FirebaseDatabase db;
     DatabaseReference requests ;
 
-
-
     MaterialSpinner spinner;
+
+    Request request;
 
     APIService mService;
 
@@ -75,6 +74,7 @@ public class OrdrerStatus extends AppCompatActivity {
         requests = db.getReference("Requests");
 
 
+
         //Init Service
         mService = Common.getFCMService();
 
@@ -84,9 +84,10 @@ public class OrdrerStatus extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
 
-
         loadOrders();
+
     }
+
 
 
     private void loadOrders() {
@@ -154,35 +155,12 @@ public class OrdrerStatus extends AppCompatActivity {
                 dialog.dismiss();
                 item.setStatus(String.valueOf(spinner.getSelectedIndex()));
 
-                if (spinner.getSelectedIndex() == 1) {
+
+                if (spinner.getSelectedIndex() == 1 ) {
                     bntedit = (Button) findViewById(R.id.btnEdit);
                     bntedit.setVisibility(View.GONE);
 
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    final DatabaseReference table_user = database.getReference("Push");
 
-                    table_user.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@androidx.annotation.NonNull DataSnapshot dataSnapshot) {
-                            TextView txtOrderId = (TextView)findViewById(R.id.order_id_num);
-                            Push RequestPush = new Push(
-
-                                    Common.currentUser.getPhone(),
-                                    Common.currentUser.getName(),
-                                    txtOrderId.getText().toString());
-
-                            table_user.child(txtOrderId.getText().toString()).setValue(RequestPush);
-
-                            Toast.makeText(OrdrerStatus.this, "Successful", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-
-
-                        @Override
-                        public void onCancelled (@androidx.annotation.NonNull DatabaseError databaseError){
-
-                        }
-                    });
 
 
                 }
