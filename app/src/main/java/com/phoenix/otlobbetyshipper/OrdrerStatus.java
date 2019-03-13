@@ -53,13 +53,13 @@ public class OrdrerStatus extends AppCompatActivity {
     FirebaseRecyclerAdapter<Request, OrderViewHolder> adapter;
 
     Button bntedit;
-    TextView ordernum;
-
 
     FirebaseDatabase db;
     DatabaseReference requests ;
 
+
     MaterialSpinner spinner;
+    Push push;
 
     Request request;
 
@@ -72,7 +72,6 @@ public class OrdrerStatus extends AppCompatActivity {
 
         db = FirebaseDatabase.getInstance();
         requests = db.getReference("Requests");
-
 
 
         //Init Service
@@ -88,9 +87,8 @@ public class OrdrerStatus extends AppCompatActivity {
 
     }
 
-
-
     private void loadOrders() {
+
         adapter = new FirebaseRecyclerAdapter<Request, OrderViewHolder>(
                 Request.class,
                 R.layout.layout_order,
@@ -132,7 +130,6 @@ public class OrdrerStatus extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-
     private void showUpdateDialog(final String key, final Request item) {
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(OrdrerStatus.this);
         alertDialog.setTitle("Update Order");
@@ -147,7 +144,7 @@ public class OrdrerStatus extends AppCompatActivity {
         alertDialog.setView(view);
 
         final String localKey = key;
-
+        final EditText editTextshippernum = (EditText)view.findViewById(R.id.id_order_for_shipper);
 
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
@@ -155,12 +152,29 @@ public class OrdrerStatus extends AppCompatActivity {
                 dialog.dismiss();
                 item.setStatus(String.valueOf(spinner.getSelectedIndex()));
 
+                final DatabaseReference ref;
+                ref = db.getReference("Push");
+
+                push = new Push(Common.currentUser.getName(),Common.currentUser.getPhone(), editTextshippernum.getText().toString());
 
                 if (spinner.getSelectedIndex() == 1 ) {
                     bntedit = (Button) findViewById(R.id.btnEdit);
                     bntedit.setVisibility(View.GONE);
 
+                    ref.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                            ref.push().setValue(push);
+                            Toast.makeText(OrdrerStatus.this, "Done", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
 
 
                 }
@@ -185,7 +199,6 @@ public class OrdrerStatus extends AppCompatActivity {
 
 
     }
-
 
 
     private void sendOrderStatusToUser(final String key, Request item) {

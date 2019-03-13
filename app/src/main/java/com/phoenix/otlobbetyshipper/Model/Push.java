@@ -8,7 +8,8 @@ public class Push {
     public Push() {
     }
 
-    public Push(String phone, String name, String idnum) {
+    public Push(String phone, String name , String idnum) {
+
         this.phone = phone;
         this.name = name;
         this.idnum = idnum;
