@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -99,8 +100,11 @@ public class OrdrerStatus extends AppCompatActivity {
             protected void populateViewHolder(OrderViewHolder orderViewHolder, final Request request, final int position) {
                 orderViewHolder.txtOrderId.setText(adapter.getRef(position).getKey());
                 orderViewHolder.txtOrderStatus.setText(convertCodeToStatus(request.getStatus()));
+
+
                 if (orderViewHolder.txtOrderStatus.getText()=="Accepted"){
                     orderViewHolder.btnEdit.setVisibility(View.GONE);
+
                 }
                 orderViewHolder.txtOrderAddress.setText(request.getAddress());
                 orderViewHolder.txtOrderPhone.setText(request.getPhone());
@@ -144,47 +148,39 @@ public class OrdrerStatus extends AppCompatActivity {
         alertDialog.setView(view);
 
         final String localKey = key;
-        final EditText editTextshippernum = (EditText)view.findViewById(R.id.id_order_for_shipper);
+
+        final DatabaseReference ref = db.getReference("Push");
 
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 item.setStatus(String.valueOf(spinner.getSelectedIndex()));
+                 EditText editTextshippernum = (EditText)view.findViewById(R.id.id_order_for_shipper);
+                //TextView txtOrderId = (TextView)findViewById(R.id.order_id_num);
+               // editTextshippernum.setText(txtOrderId.getText().toString());
+                push = new Push(Common.currentUser.getName(), Common.currentUser.getPhone(), editTextshippernum.getText().toString());
+                String edit = editTextshippernum.getText().toString();
 
-                final DatabaseReference ref;
-                ref = db.getReference("Push");
-
-                push = new Push(Common.currentUser.getName(),Common.currentUser.getPhone(), editTextshippernum.getText().toString());
-
-                if (spinner.getSelectedIndex() == 1 ) {
-                    bntedit = (Button) findViewById(R.id.btnEdit);
-                    bntedit.setVisibility(View.GONE);
-
-                    ref.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                if (spinner.getSelectedIndex() == 1) {
+                    if (TextUtils.isEmpty(edit)) {
+                        Toast.makeText(OrdrerStatus.this, "Please Enter Id number of Order", Toast.LENGTH_SHORT).show();
+                    }else{
+                            bntedit = (Button) findViewById(R.id.btnEdit);
+                            bntedit.setVisibility(View.GONE);
                             ref.push().setValue(push);
-                            Toast.makeText(OrdrerStatus.this, "Done", Toast.LENGTH_SHORT).show();
+
                             finish();
+
+                            Toast.makeText(OrdrerStatus.this, "Done", Toast.LENGTH_SHORT).show();
+
+                            requests.child(localKey).setValue(item);
+                            adapter.notifyDataSetChanged(); // Add to Alert
+                            sendOrderStatusToUser(localKey, item);
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-
-
+                } else {
+                    dialog.dismiss();
                 }
-
-
-                requests.child(localKey).setValue(item);
-                adapter.notifyDataSetChanged(); // Add to Alert
-
-                sendOrderStatusToUser(localKey, item);
-
 
             }
 

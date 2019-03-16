@@ -1,5 +1,7 @@
 package com.phoenix.otlobbetyshipper.Model;
 
+import android.text.Editable;
+
 public class Push {
     private String phone;
     private String name;
