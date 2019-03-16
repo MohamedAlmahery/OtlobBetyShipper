@@ -25,3 +25,4 @@ public class MyFirebaseIdService extends FirebaseInstanceIdService {
         tokens.child(Common.currentUser.getPhone()).setValue(token);
     }
 }
+
