@@ -21,4 +21,16 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <info.hoang8f.widget.FButton
+        android:id="@+id/myOrders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:cornerRadius="@color/fbutton_color_carrot"
+        android:text="My Accepted Orders"
+        />
+
 </RelativeLayout>

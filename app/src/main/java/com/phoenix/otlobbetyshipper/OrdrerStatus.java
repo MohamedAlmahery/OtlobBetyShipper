@@ -40,6 +40,7 @@ import com.phoenix.otlobbetyshipper.ViewHolder.OrderViewHolder;
 import com.phoenix.otlobbetyshipper.Model.Request;
 import com.phoenix.otlobbetyshipper.ViewHolder.OrderViewHolder;
 
+import info.hoang8f.widget.FButton;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,7 +64,7 @@ public class OrdrerStatus extends AppCompatActivity {
     Push push;
 
     Request request;
-
+    FButton btnmyorders;
     APIService mService;
 
     @Override
@@ -73,6 +74,7 @@ public class OrdrerStatus extends AppCompatActivity {
 
         db = FirebaseDatabase.getInstance();
         requests = db.getReference("Requests");
+        btnmyorders = (FButton)findViewById(R.id.myOrders);
 
 
         //Init Service
@@ -83,6 +85,13 @@ public class OrdrerStatus extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
+        btnmyorders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ordersintent = new Intent(OrdrerStatus.this,MyOrders.class);
+                startActivity(ordersintent);
+            }
+        });
 
         loadOrders();
 

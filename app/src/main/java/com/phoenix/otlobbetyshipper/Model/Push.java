@@ -3,26 +3,18 @@ package com.phoenix.otlobbetyshipper.Model;
 import android.text.Editable;
 
 public class Push {
-    private String phone;
     private String name;
+    private String phone;
     private String idnum;
 
     public Push() {
     }
 
-    public Push(String phone, String name , String idnum) {
+    public Push(String name, String phone , String idnum) {
 
-        this.phone = phone;
         this.name = name;
-        this.idnum = idnum;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
         this.phone = phone;
+        this.idnum = idnum;
     }
 
     public String getName() {
@@ -31,6 +23,14 @@ public class Push {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getIdnum() {
